@@ -2,15 +2,22 @@ package fi.arcada.regressionsanalys;
 
 public class RegressionLine {
 
-    double[] xData, yData;
-    double k, m, x, r;
+    private double[] xData, yData;
+    private double k, m, x, r;
 
     public RegressionLine(double[] xData, double[] yData) {
-        this.xData = xData;
-        this.yData = yData;
+        this.xData = new double[xData.length];
+        for (int i = 0; i < xData.length; i++) {
+            this.xData[i] += xData[i];
+        }
+
+        this.yData = new double[yData.length];
+        for (int i = 0; i < yData.length; i++) {
+            this.yData[i] += yData[i];
+        }
     }
 
-    public static void rCalculate(double[] xData, double[] yData) {
+    private double getCorrelationCoefficient() {
         /* PREPARE DATA */
         int n;
         double Sx, Sy, Sxy, Sx2, Sy2;
@@ -110,8 +117,7 @@ public class RegressionLine {
 
         // r
         double r = s3 / s11;
-
-        System.out.println("r " + r);
+        return  r;
     }
 
 

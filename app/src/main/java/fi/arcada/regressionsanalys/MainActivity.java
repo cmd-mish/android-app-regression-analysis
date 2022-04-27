@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Här kommer som vanligt alla findViewById som behövs
-        RegressionLine.rCalculate(xData, yData);
     }
 
     // Gör så att den här metoden anropas vid ett knapptryck
