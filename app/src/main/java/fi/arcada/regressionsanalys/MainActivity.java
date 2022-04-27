@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+
+import java.util.Formatter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Deklarera yValue för längd, Denna variabel ska sedan få ett värde som hämtas från en EditText-box i appens GUI
     double yValue;
+    TextView textViewResult;
 
     // Deklarera övriga variabler och objekt du behöver, t.ex. TextViews osv.
 
@@ -38,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        textViewResult = findViewById(R.id.textViewResult);
+
+        RegressionLine line = new RegressionLine(xData, yData);
+
 
         // Här kommer som vanligt alla findViewById som behövs
     }
