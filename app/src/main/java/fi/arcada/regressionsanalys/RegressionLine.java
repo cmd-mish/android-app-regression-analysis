@@ -3,7 +3,7 @@ package fi.arcada.regressionsanalys;
 public class RegressionLine {
 
     private static double[] xData, yData;
-    private double k, m, x;
+    private double k, m, x, correlationCoefficient;
 
     // Konstruktormetod
     public RegressionLine(double[] xData, double[] yData) {
@@ -18,6 +18,8 @@ public class RegressionLine {
         }
 
         this.k = getk();
+        this.correlationCoefficient = getCorrelationCoefficient();
+        this.m = getm();
     }
 
     // Formeln för minsta kvadratmetoden
@@ -76,32 +78,54 @@ public class RegressionLine {
 
         // n(Sxy)
         double s1 = n * Sxy;
-        System.out.println("s1: " + s1);
 
         // (Sx)(Sy)
         double s2 = Sx * Sy;
-        System.out.println("s2: " + s2);
 
         // n(Sxy) - (Sx)(Sy)
         double s3 = s1 - s2;
-        System.out.println("s3: " + s3);
 
         // n(Sx2)
         double s4 = n * Sx2;
-        System.out.println("s4: " + s4);
 
         // (Sx)2
-        double s5 = Math.pow(Sx2, 2);
-        System.out.println("s5: " + s5);
+        double s5 = Math.pow(Sx, 2);
 
         // n(Sx2) - (Sx)2
         double s6 = s4 - s5;
-        System.out.println("s6: " + s6);
 
         // k
         double k = s3 / s6;
-        System.out.println("k: " + k);
         return k;
+    }
+
+    public static double getm() {
+        /* PREPARE DATA */
+        int n;
+        double My, Mx, sum, m;
+
+        // n
+        n = xData.length;
+
+        // My
+        My = 0.0;
+        sum = 0.0;
+        for (int i = 0; i < n; i++) {
+            sum += yData[i];
+        }
+        My = sum / n;
+
+        // Mx
+        Mx = 0.0;
+        sum = 0.0;
+        for (int i = 0; i < n; i++) {
+            sum += xData[i];
+        }
+        Mx = sum / n;
+
+        /* CALCULATE FORMULA */
+        m = My - getk() * Mx;
+        return m;
     }
 
     // Del 3: Korrelationskoefficienten
