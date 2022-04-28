@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Formatter;
 
@@ -16,53 +18,26 @@ public class MainActivity extends AppCompatActivity {
     double[] xData = { 47,  42,  43,  42,  41,  48,  46,  44,  42,  43,  39,  43,  39,  42,  44,  45,  43,  44,  45,  42,  43,  32,  48,  43,  45,  45};
     double[] yData = { 194, 188, 181, 177, 182, 197, 179, 176, 177, 188, 164, 171, 170, 180, 171, 185, 179, 182, 180, 178, 178, 148, 197, 183, 179, 198};
 
-    /* double[] xData = { 520,
-            610,
-            840,
-            540,
-            360,
-            260,
-            85 };
-
-    double[] yData = { 17,
-            22,
-            26,
-            19,
-            16,
-            15,
-            14 }; */
-
     // Deklarera yValue för längd, Denna variabel ska sedan få ett värde som hämtas från en EditText-box i appens GUI
     double yValue;
-    TextView textViewResult, textViewCoefficient, textViewGrade;
 
     // Deklarera övriga variabler och objekt du behöver, t.ex. TextViews osv.
+    TextView textViewResult, textViewCoefficient, textViewGrade;
+    EditText editTextNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textViewResult = findViewById(R.id.textViewResult);
-        textViewCoefficient = findViewById(R.id.textViewCoefficient);
-        textViewGrade = findViewById(R.id.textViewGrade);
-
-        RegressionLine line = new RegressionLine(xData, yData);
-        double result = line.getX(180.0);
-        String output = String.format("%.2f", result);
-        textViewResult.setText(output);
-        double coeff = line.getCorrelationCoefficient();
-        output = String.format("%.2f", coeff);
-        textViewCoefficient.setText(output);
-        String grade = line.getCorrelationGrade();
-        textViewGrade.setText(grade);
-
 
         // Här kommer som vanligt alla findViewById som behövs
+        textViewResult = findViewById(R.id.textViewResult);
+        textViewCoefficient = findViewById(R.id.textViewCoefficient);
+        editTextNumber = findViewById(R.id.editTextNumber);
     }
 
     // Gör så att den här metoden anropas vid ett knapptryck
     public void getEstimate(View view) {
-
         // RegressionLine beräknar regressionslinjen på basen av våra datamängder
         // RegressionLine är alltså en klass som vi själva definierat (och som bör vidareutvecklas!)
         // Instansiera regressionLine t.ex. så här:
@@ -78,6 +53,23 @@ public class MainActivity extends AppCompatActivity {
         // DEL 3: Anropa regLine.get()-metoden via objektet regLine, och använd yValue som parameter
         // Skicka svaret till en TextView i layouten!
 
+        try {
+            yValue = Double.parseDouble(editTextNumber.getText().toString());
+            RegressionLine line = new RegressionLine(xData, yData);
+
+            double X = line.getX(yValue);
+            String output = String.format("Skostorlek: %.2f", X);
+            textViewResult.setText(output);
+
+            double r = line.getCorrelationCoefficient();
+            String grade = line.getCorrelationGrade();
+            output = String.format("Korrelationskoefficient: %.2f (%s)", r, grade);
+            textViewCoefficient.setText(output);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Skriv ett tal!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Nåt gick fel: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
