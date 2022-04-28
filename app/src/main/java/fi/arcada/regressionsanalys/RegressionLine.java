@@ -3,7 +3,7 @@ package fi.arcada.regressionsanalys;
 public class RegressionLine {
 
     private static double[] xData, yData;
-    private double k, m, x, correlationCoefficient;
+    private double k, m, correlationCoefficient;
 
     // Konstruktormetod
     public RegressionLine(double[] xData, double[] yData) {
@@ -23,7 +23,7 @@ public class RegressionLine {
     }
 
     // Formeln för minsta kvadratmetoden
-    public static double getk() {
+    public double getk() {
         /* PREPARE DATA */
         int n;
         double Sx, Sy, Sxy, Sx2;
@@ -99,7 +99,7 @@ public class RegressionLine {
         return k;
     }
 
-    public static double getm() {
+    public double getm() {
         /* PREPARE DATA */
         int n;
         double My, Mx, sum, m;
@@ -124,12 +124,18 @@ public class RegressionLine {
         Mx = sum / n;
 
         /* CALCULATE FORMULA */
-        m = My - getk() * Mx;
+        m = My - this.k * Mx;
         return m;
     }
 
+    public double getX(double y) {
+        double x;
+        x = (y - this.m) / this.k;
+        return x;
+    }
+
     // Del 3: Korrelationskoefficienten
-    public static double getCorrelationCoefficient() {
+    public double getCorrelationCoefficient() {
         /* PREPARE DATA */
         int n;
         double Sx, Sy, Sxy, Sx2, Sy2;
@@ -224,6 +230,19 @@ public class RegressionLine {
         // r
         double r = s3 / s11;
         return  r;
+    }
+
+    public String getCorrelationGrade() {
+        String grade = "";
+        double r = this.correlationCoefficient;
+
+        if (r == 1 || r == -1) grade = "Perfekt";
+        if ((r < 1 && r >= 0.75) || (r > -1 && r <= -0.75)) grade = "Hög";
+        if ((r < 0.75 && r >= 0.25) || (r > -0.75 && r <= -0.25)) grade = "Måttlig";
+        if ((r < 0.25 && r > 0) || (r > -0.25 && r < 0)) grade = "Låg";
+        if (r == 0) grade = "Ingen korrelation";
+
+        return grade;
     }
 
 
